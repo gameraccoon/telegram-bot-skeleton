@@ -5,7 +5,6 @@ import (
 	"github.com/gameraccoon/telegram-bot-skeleton/database"
 	"github.com/gameraccoon/telegram-bot-skeleton/dialog"
 	"github.com/nicksnyder/go-i18n/i18n"
-	"time"
 )
 
 type LanguageData struct {
@@ -34,11 +33,12 @@ type UserState struct {
 type StaticProccessStructs struct {
 	Chat chat.Chat
 	Db *database.Database
-	Timers map[int64]time.Time
 	Config *StaticConfiguration
 	Trans map[string]i18n.TranslateFunc
 	MakeDialogFn func(string, int64, i18n.TranslateFunc, *StaticProccessStructs)*dialog.Dialog
 	userStates map[int64]UserState
+	// custom data that can be used in different places
+	customData map[string]interface{}
 }
 
 func (staticData *StaticProccessStructs) Init() {
@@ -93,3 +93,20 @@ func (staticData *StaticProccessStructs) GetUserStateValue(userId int64, key str
 		return nil
 	}
 }
+
+func (staticData *StaticProccessStructs) SetCustomValue(key string, value interface{}) {
+	if staticData.customData == nil {
+		staticData.customData = map[string]interface{}{}
+	}
+
+	staticData.customData[key] = value
+}
+
+func (staticData *StaticProccessStructs) GetCustomValue(key string) interface{} {
+	if staticData.customData == nil {
+		return nil
+	}
+
+	return staticData.customData[key]
+}
+

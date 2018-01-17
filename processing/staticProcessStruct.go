@@ -7,17 +7,6 @@ import (
 	"github.com/nicksnyder/go-i18n/i18n"
 )
 
-type LanguageData struct {
-	Key string
-	Name string
-}
-
-type StaticConfiguration struct {
-	AvailableLanguages []LanguageData
-	DefaultLanguage string
-	ExtendedLog bool
-}
-
 type AwaitingTextProcessorData struct {
 	ProcessorId string
 	AdditionalId int64
@@ -33,7 +22,7 @@ type UserState struct {
 type StaticProccessStructs struct {
 	Chat chat.Chat
 	Db *database.Database
-	Config *StaticConfiguration
+	Config interface{}
 	Trans map[string]i18n.TranslateFunc
 	MakeDialogFn func(string, int64, i18n.TranslateFunc, *StaticProccessStructs)*dialog.Dialog
 	userStates map[int64]UserState

@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"github.com/gameraccoon/telegram-bot-skeleton/dialog"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
+	"sync"
 )
 
 type TelegramChat struct {
 	bot *tgbotapi.BotAPI
+	mutex sync.Mutex
 }
 
 func MakeTelegramChat(apiToken string) (bot *TelegramChat, outErr error) {
@@ -58,7 +60,9 @@ func (telegramChat *TelegramChat) SendMessage(chatId int64, message string, mess
 
 	packedMessage := makeMessage(chatId, message, messageToReplace, nil)
 
+	telegramChat.mutex.Lock()
 	sentMessage, err := telegramChat.bot.Send(packedMessage)
+	telegramChat.mutex.Unlock()
 
 	if err == nil {
 		messageId = int64(sentMessage.MessageID)
@@ -98,7 +102,9 @@ func (telegramChat *TelegramChat) SendDialog(chatId int64, dialog *dialog.Dialog
 
 	packedMessage := makeMessage(chatId, dialog.Text, messageToReplace, &markup)
 
+	telegramChat.mutex.Lock()
 	sentMessage, err := telegramChat.bot.Send(packedMessage)
+	telegramChat.mutex.Unlock()
 
 	if err == nil {
 		messageId = int64(sentMessage.MessageID)
@@ -117,8 +123,19 @@ func (telegramChat *TelegramChat) RemoveMessage(chatId int64, messageId int64) {
 		MessageID: int(messageId),
 	}
 
+	telegramChat.mutex.Lock()
 	_, err := telegramChat.bot.DeleteMessage(deleteConfig)
+	telegramChat.mutex.Unlock()
+
 	if err != nil {
 
 	}
+}
+
+func (telegramChat *TelegramChat) LockMutex() {
+	telegramChat.mutex.Lock()
+}
+
+func (telegramChat *TelegramChat) UnlockMutex() {
+	telegramChat.mutex.Unlock()
 }

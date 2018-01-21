@@ -12,6 +12,13 @@ func init() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 }
 
+type disconnectedError struct {
+}
+
+func (e disconnectedError) Error() string {
+	return "database is closed"
+}
+
 type Database struct {
 	// connection
 	conn *sql.DB
@@ -22,6 +29,11 @@ func SanitizeString(input string) string {
 }
 
 func (database *Database) Exec(query string) {
+	if !database.IsConnectionOpened() {
+		log.Print(disconnectedError{}.Error())
+		return
+	}
+
 	_, err := database.conn.Exec(query)
 
 	if err != nil {
@@ -30,6 +42,11 @@ func (database *Database) Exec(query string) {
 }
 
 func (database *Database) Query(query string) (*sql.Rows, error) {
+	if !database.IsConnectionOpened() {
+		log.Print()
+		return nil, disconnectedError{}
+	}
+
 	return database.conn.Query(query)
 }
 

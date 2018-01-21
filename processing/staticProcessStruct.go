@@ -2,7 +2,6 @@ package processing
 
 import (
 	"github.com/gameraccoon/telegram-bot-skeleton/chat"
-	"github.com/gameraccoon/telegram-bot-skeleton/database"
 	"github.com/gameraccoon/telegram-bot-skeleton/dialog"
 	"github.com/nicksnyder/go-i18n/i18n"
 )
@@ -21,7 +20,7 @@ type UserState struct {
 
 type StaticProccessStructs struct {
 	Chat chat.Chat
-	Db *database.Database
+	Db interface{}
 	Config interface{}
 	Trans map[string]i18n.TranslateFunc
 	MakeDialogFn func(string, int64, i18n.TranslateFunc, *StaticProccessStructs)*dialog.Dialog

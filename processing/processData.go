@@ -13,6 +13,7 @@ type ProcessData struct {
 	UserId            int64
 	Trans             i18n.TranslateFunc
 	AnsweredMessageId int64
+	UserSystemLang    string
 }
 
 func (data *ProcessData) SubstitudeMessage(message string) int64 {

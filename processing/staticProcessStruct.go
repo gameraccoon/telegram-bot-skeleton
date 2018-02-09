@@ -82,6 +82,13 @@ func (staticData *StaticProccessStructs) GetUserStateValue(userId int64, key str
 	}
 }
 
+func (staticData *StaticProccessStructs) CleanUserStateValues(userId int64) {
+	state := staticData.userStates[userId]
+	state.customData = map[string]interface{}{}
+	staticData.userStates[userId] = state
+}
+
+
 func (staticData *StaticProccessStructs) SetCustomValue(key string, value interface{}) {
 	if staticData.customData == nil {
 		staticData.customData = map[string]interface{}{}

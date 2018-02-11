@@ -42,6 +42,7 @@ func makeMessage(chatId int64, message string, messageToReplace int64, markup *t
 	if messageToReplace == 0 {
 		msg := tgbotapi.NewMessage(chatId, message)
 		msg.ParseMode = "HTML"
+		msg.DisableWebPagePreview = true
 		if markup != nil {
 			msg.ReplyMarkup = markup
 		}
@@ -49,6 +50,7 @@ func makeMessage(chatId int64, message string, messageToReplace int64, markup *t
 	} else {
 		msg := tgbotapi.NewEditMessageText(chatId, int(messageToReplace), message)
 		msg.ParseMode = "HTML"
+		msg.DisableWebPagePreview = true
 		if markup != nil {
 			msg.ReplyMarkup = markup
 		}

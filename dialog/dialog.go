@@ -4,6 +4,7 @@ type Variant struct {
 	Id   string
 	AdditionalId string // additional id or some info that will be appended to a button/link
 	Text string // text visible to the user
+	Url string // optional URL
 	RowId int // from 1
 }
 

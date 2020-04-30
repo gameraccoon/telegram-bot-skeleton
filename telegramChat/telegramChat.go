@@ -88,17 +88,25 @@ func (telegramChat *TelegramChat) SendDialog(chatId int64, dialog *dialog.Dialog
 	currentRow := []tgbotapi.InlineKeyboardButton{}
 	currentRowId := 0
 	for _, variant := range dialog.Variants {
-			if currentRowId != variant.RowId {
-				if len(currentRow) > 0 {
-					markup.InlineKeyboard = append(markup.InlineKeyboard, currentRow)
-				}
-				currentRow = []tgbotapi.InlineKeyboardButton{}
-				currentRowId = variant.RowId
+		if currentRowId != variant.RowId {
+			if len(currentRow) > 0 {
+				markup.InlineKeyboard = append(markup.InlineKeyboard, currentRow)
 			}
-		currentRow = append(currentRow, tgbotapi.NewInlineKeyboardButtonData(
-					variant.Text,
-					getCommand(dialog.Id, variant.Id, variant.AdditionalId),
-		))
+			currentRow = []tgbotapi.InlineKeyboardButton{}
+			currentRowId = variant.RowId
+		}
+
+		if len(variant.Url) == 0 {
+			currentRow = append(currentRow, tgbotapi.NewInlineKeyboardButtonData(
+				variant.Text,
+				getCommand(dialog.Id, variant.Id, variant.AdditionalId),
+			))
+		} else {
+			currentRow = append(currentRow, tgbotapi.NewInlineKeyboardButtonURL(
+				variant.Text,
+				variant.Url,
+			))
+		}
 	}
 	markup.InlineKeyboard = append(markup.InlineKeyboard, currentRow)
 

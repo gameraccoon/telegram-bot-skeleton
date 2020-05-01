@@ -24,7 +24,7 @@ type StaticProccessStructs struct {
 	Config interface{}
 	Trans map[string]i18n.TranslateFunc
 	BotName string
-	MakeDialogFn func(string, int64, i18n.TranslateFunc, *StaticProccessStructs)*dialog.Dialog
+	MakeDialogFn func(string, int64, i18n.TranslateFunc, *StaticProccessStructs, interface{})*dialog.Dialog
 	userStates map[int64]UserState
 	// custom data that can be used in different places
 	customData map[string]interface{}

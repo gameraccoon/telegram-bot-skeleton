@@ -24,10 +24,10 @@ func (dialogManager *DialogManager) RegisterTextInputProcessorManager(textInputP
 	dialogManager.textProcessors = textInputProcessorManager
 }
 
-func (dialogManager *DialogManager) MakeDialog(dialogId string, id int64, trans i18n.TranslateFunc, staticData *processing.StaticProccessStructs) (dialog *dialog.Dialog) {
+func (dialogManager *DialogManager) MakeDialog(dialogId string, id int64, trans i18n.TranslateFunc, staticData *processing.StaticProccessStructs, customData interface{}) (dialog *dialog.Dialog) {
 	factory := dialogManager.getDialogFactory(dialogId)
 	if factory != nil {
-		dialog = factory.MakeDialog(id, trans, staticData)
+		dialog = factory.MakeDialog(id, trans, staticData, customData)
 		dialog.Id = dialogId
 	}
 	return

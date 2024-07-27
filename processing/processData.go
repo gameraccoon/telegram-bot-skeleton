@@ -18,15 +18,15 @@ type ProcessData struct {
 }
 
 func (data *ProcessData) SubstitudeMessage(message string) int64 {
-	return data.Static.Chat.SendMessage(data.ChatId, message, data.AnsweredMessageId)
+	return data.Static.Chat.SendMessage(data.ChatId, message, data.AnsweredMessageId, false)
 }
 
 func (data *ProcessData) SubstitudeDialog(dialog *dialog.Dialog) int64 {
 	return data.Static.Chat.SendDialog(data.ChatId, dialog, data.AnsweredMessageId)
 }
 
-func (data *ProcessData) SendMessage(message string) int64 {
-	return data.Static.Chat.SendMessage(data.ChatId, message, 0)
+func (data *ProcessData) SendMessage(message string, preventPreview bool) int64 {
+	return data.Static.Chat.SendMessage(data.ChatId, message, 0, preventPreview)
 }
 
 func (data *ProcessData) SendDialog(dialog *dialog.Dialog) int64 {

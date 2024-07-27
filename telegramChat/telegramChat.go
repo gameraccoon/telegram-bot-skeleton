@@ -38,11 +38,13 @@ func (telegramChat *TelegramChat) GetBotUsername() string {
 	return telegramChat.bot.Self.UserName
 }
 
-func makeMessage(chatId int64, message string, messageToReplace int64, markup *tgbotapi.InlineKeyboardMarkup) tgbotapi.Chattable {
+func makeMessage(chatId int64, message string, messageToReplace int64, preventPreview bool, markup *tgbotapi.InlineKeyboardMarkup) tgbotapi.Chattable {
 	if messageToReplace == 0 {
 		msg := tgbotapi.NewMessage(chatId, message)
 		msg.ParseMode = "HTML"
-		msg.DisableWebPagePreview = true
+		if preventPreview {
+			msg.DisableWebPagePreview = true
+		}
 		if markup != nil {
 			msg.ReplyMarkup = markup
 		}
@@ -58,9 +60,9 @@ func makeMessage(chatId int64, message string, messageToReplace int64, markup *t
 	}
 }
 
-func (telegramChat *TelegramChat) SendMessage(chatId int64, message string, messageToReplace int64) (messageId int64) {
+func (telegramChat *TelegramChat) SendMessage(chatId int64, message string, messageToReplace int64, preventPreview bool) (messageId int64) {
 
-	packedMessage := makeMessage(chatId, message, messageToReplace, nil)
+	packedMessage := makeMessage(chatId, message, messageToReplace, preventPreview, nil)
 
 	telegramChat.mutex.Lock()
 	sentMessage, err := telegramChat.bot.Send(packedMessage)
@@ -110,7 +112,7 @@ func (telegramChat *TelegramChat) SendDialog(chatId int64, dialog *dialog.Dialog
 	}
 	markup.InlineKeyboard = append(markup.InlineKeyboard, currentRow)
 
-	packedMessage := makeMessage(chatId, dialog.Text, messageToReplace, &markup)
+	packedMessage := makeMessage(chatId, dialog.Text, messageToReplace, true, &markup)
 
 	telegramChat.mutex.Lock()
 	sentMessage, err := telegramChat.bot.Send(packedMessage)

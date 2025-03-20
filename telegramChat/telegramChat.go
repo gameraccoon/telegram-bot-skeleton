@@ -3,6 +3,7 @@ package telegramChat
 import (
 	"fmt"
 	"github.com/gameraccoon/telegram-bot-skeleton/dialog"
+	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"sync"
 )
 

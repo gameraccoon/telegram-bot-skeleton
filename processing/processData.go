@@ -17,11 +17,11 @@ type ProcessData struct {
 	UserSystemName    string
 }
 
-func (data *ProcessData) SubstitudeMessage(message string) int64 {
+func (data *ProcessData) SubstituteMessage(message string) int64 {
 	return data.Static.Chat.SendMessage(data.ChatId, message, data.AnsweredMessageId, false)
 }
 
-func (data *ProcessData) SubstitudeDialog(dialog *dialog.Dialog) int64 {
+func (data *ProcessData) SubstituteDialog(dialog *dialog.Dialog) int64 {
 	return data.Static.Chat.SendDialog(data.ChatId, dialog, data.AnsweredMessageId)
 }
 

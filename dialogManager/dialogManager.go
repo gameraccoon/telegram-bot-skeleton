@@ -2,13 +2,13 @@ package dialogManager
 
 import (
 	"github.com/gameraccoon/telegram-bot-skeleton/dialog"
-	"github.com/gameraccoon/telegram-bot-skeleton/processing"
 	"github.com/gameraccoon/telegram-bot-skeleton/dialogFactory"
+	"github.com/gameraccoon/telegram-bot-skeleton/processing"
 	"github.com/nicksnyder/go-i18n/i18n"
 )
 
 type DialogManager struct {
-	dialogs map[string]dialogFactory.DialogFactory
+	dialogs        map[string]dialogFactory.DialogFactory
 	textProcessors TextInputProcessorManager
 }
 
@@ -28,7 +28,9 @@ func (dialogManager *DialogManager) MakeDialog(dialogId string, id int64, trans 
 	factory := dialogManager.getDialogFactory(dialogId)
 	if factory != nil {
 		dialog = factory.MakeDialog(id, trans, staticData, customData)
-		dialog.Id = dialogId
+		if dialog != nil {
+			dialog.Id = dialogId
+		}
 	}
 	return
 }
@@ -46,9 +48,9 @@ func (dialogManager *DialogManager) ProcessText(data *processing.ProcessData) bo
 }
 
 func (dialogManager *DialogManager) getDialogFactory(id string) dialogFactory.DialogFactory {
-	dialogFactory, ok := dialogManager.dialogs[id]
-	if ok && dialogFactory != nil {
-		return dialogFactory
+	factory, ok := dialogManager.dialogs[id]
+	if ok && factory != nil {
+		return factory
 	} else {
 		return nil
 	}

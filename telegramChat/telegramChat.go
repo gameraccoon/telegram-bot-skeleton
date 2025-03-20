@@ -3,12 +3,11 @@ package telegramChat
 import (
 	"fmt"
 	"github.com/gameraccoon/telegram-bot-skeleton/dialog"
-	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"sync"
 )
 
 type TelegramChat struct {
-	bot *tgbotapi.BotAPI
+	bot   *tgbotapi.BotAPI
 	mutex sync.Mutex
 }
 
@@ -82,6 +81,9 @@ func getCommand(dialogId string, variantId string, additionalId string) string {
 }
 
 func (telegramChat *TelegramChat) SendDialog(chatId int64, dialog *dialog.Dialog, messageToReplace int64) (messageId int64) {
+	if dialog == nil {
+		return
+	}
 
 	markup := tgbotapi.NewInlineKeyboardMarkup()
 
@@ -128,8 +130,8 @@ func (telegramChat *TelegramChat) RemoveMessage(chatId int64, messageId int64) {
 		return
 	}
 
-	deleteConfig := tgbotapi.DeleteMessageConfig {
-		ChatID: chatId,
+	deleteConfig := tgbotapi.DeleteMessageConfig{
+		ChatID:    chatId,
 		MessageID: int(messageId),
 	}
 
